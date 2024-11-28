@@ -24,6 +24,27 @@ int timeAmber = 2;
 int timeGreen = 3;
 
 
+void display_i2c(void)
+{
+    // Di chuyển con trỏ đến vị trí dòng 1, cột 0
+    lcd_goto_XY(1, 0);
+    lcd_send_string("Main: ");
+
+    // Chuyển giá trị clock_counter_main thành chuỗi và hiển thị
+    char buffer_main[10];
+    sprintf(buffer_main, "%d", clock_counter_main);  // Định dạng số thành chuỗi
+    lcd_send_string(buffer_main);  // Hiển thị giá trị clock_counter_main
+
+    // Di chuyển con trỏ đến vị trí dòng 2, cột 0
+    lcd_goto_XY(2, 0);
+    lcd_send_string("Side: ");
+
+    // Chuyển giá trị clock_counter_side thành chuỗi và hiển thị
+    char buffer_side[10];
+    sprintf(buffer_side, "%d", clock_counter_side);  // Định dạng số thành chuỗi
+    lcd_send_string(buffer_side);  // Hiển thị giá trị clock_counter_side
+}
+
 // ======================= CHẾ ĐỘ TỰ ĐỘNG =======================
 
 
@@ -40,10 +61,12 @@ void fsm_traffic_auto_mode(void) {
             break; // Không làm gì
         case INIT:
             switchAutoState(RED_GREEN, timeRed, timeGreen);
+
             break;
         case RED_GREEN:
             turnOnRed(0);
             turnOnGreen(1);
+            display_i2c();
             if (clock_counter_side == 0)
                 switchAutoState(RED_AMBER, clock_counter_main, timeAmber);
             break;
@@ -68,6 +91,7 @@ void fsm_traffic_auto_mode(void) {
         default:
             break;
     }
+    clock_counter_traffic_update();
 }
 
 
@@ -235,13 +259,25 @@ void fsm_traffic(void){
 	}
 }
 
-void clock_counter_traffic_update(void){
-	if((timer_flag[0] == 1) && (trafficMode == AUTO_MODE)){
-		clock_counter_main--;
-		clock_counter_side--;
-		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "\n!7SEG WAY1:%d#\r\n",clock_counter_main),500);
-		HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!7SEG WAY2:%d#\r\n",clock_counter_side),500);
+void clock_counter_traffic_update(void) {
+    if ((timer_flag[0] == 1) && (trafficMode == AUTO_MODE)) {
+        // Giảm bộ đếm thời gian cho cả hai hướng
+        if (clock_counter_main > 0) {
+            clock_counter_main--;
+        }
+        if (clock_counter_side > 0) {
+            clock_counter_side--;
+        }
 
-		setTimer(timer_duration[0], 0);
-	}
+        // Gửi thông tin về thời gian bộ đếm vào UART
+        HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "\n!7SEG WAY1:%d#\r\n", clock_counter_main), 500);
+        HAL_UART_Transmit(&huart2, (void*)str, sprintf(str, "!7SEG WAY2:%d#\r\n", clock_counter_side), 500);
+
+        // Cập nhật màn hình LCD với giá trị mới
+        display_i2c();
+
+        // Cập nhật lại timer
+        setTimer(timer_duration[0], 0);
+    }
 }
+

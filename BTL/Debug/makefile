@@ -79,8 +79,8 @@ all: main-build
 main-build: BTL.elf secondary-outputs
 
 # Tool invocations
-BTL.elf: $(OBJS) $(USER_OBJS) C:\Users\Dell\BTL\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-g++ -o "BTL.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Dell\BTL\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BTL.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+BTL.elf: $(OBJS) $(USER_OBJS) C:\Users\Dell\MCU_241\BTL\STM32F103RBTX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-g++ -o "BTL.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m3 -T"C:\Users\Dell\MCU_241\BTL\STM32F103RBTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="BTL.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

@@ -9,6 +9,7 @@
 
 #include "global.h"
 #include <stdio.h>
+#include "i2c-lcd.h"
 
 void fsm_switch_mode(void);
 void fsm_traffic(void);
