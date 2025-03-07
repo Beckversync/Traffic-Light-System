@@ -1,6 +1,4 @@
-Here’s a well-structured description for the Traffic Light System project:  
 
----
 
 # 🚦 Traffic Light Control System with STM32F103RB  
 
