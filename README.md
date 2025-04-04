@@ -1,8 +1,8 @@
 
 
-# 🚦 Traffic Light Control System with STM32F103RB  
+#  Traffic Light Control System with STM32F103RB  
 
-## 📝 Overview  
+##  Overview  
 This project implements a **traffic light control system** using the **STM32F103RB microcontroller**, designed with both **automatic** and **manual modes**. The system allows **adjustable timing** for **red**, **yellow**, and **green lights** through **button inputs**, with a **real-time display** on an integrated **LCD screen**.  
 
 ##  Features  
